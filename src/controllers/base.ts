@@ -13,4 +13,16 @@ export const createEntity:RequestHandler = (req, res, next) =>{
 export const getEntity:RequestHandler = (req,res,next)=>{
     res.json({entities:ENTITY})
 }
+ 
+export const updateEntity:RequestHandler<{id: string}>  = (req,res,next) =>{
+    const entityId = req.params.id
+    const updatedText = (req.body as {text: string}).text
 
+    const index = ENTITY.findIndex(entity => entity.id === entityId)
+    if (index < 0) {
+        throw new Error("Could not find entity");
+    
+    }
+    ENTITY[index] = new Entity(ENTITY[index].id, updatedText)
+    res.json({message: 'Updated', updatedEntity: ENTITY[index]})
+}
